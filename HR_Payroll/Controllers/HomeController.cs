@@ -20,6 +20,7 @@ namespace HR_Payroll.Controllers
 
         public IActionResult Index()
         {
+          
             return View();
         }
 

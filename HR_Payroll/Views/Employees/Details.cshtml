@@ -1,0 +1,82 @@
+﻿@model HR_Payroll_Library.Employee
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Employee</h1>
+
+<div>
+    <h4>Details</h4>
+    <p>
+        <a asp-controller="Dependents" asp-action="Create">Create New Dependents</a>
+    </p>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.fname)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.fname)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.lname)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.lname)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.benefits)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.benefits)
+        </dd>
+    </dl>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.fname)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.lname)
+                </th>
+                @*<th>
+                        @Html.DisplayNameFor(model => model.dcode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Employee)
+                    </th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Dependents)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.fname)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.lname)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.dcode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee.ID)
+                    </td>
+                    <td>
+                        <a asp-controller="Dependents" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                        <a asp-controller="Dependents" asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                        <a asp-controller="Dependents" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
