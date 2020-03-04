@@ -17,5 +17,8 @@ namespace HR_Payroll_Library
         public decimal id { get; set; }
         public string bcode { get; set; }
         public string description { get; set; }
+        public int employeeID { get; set; }
+    
+        public virtual Employee Employee { get; set; }
     }
 }

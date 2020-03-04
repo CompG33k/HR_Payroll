@@ -61,7 +61,6 @@ namespace HR_Payroll.Controllers
         {
             if (ModelState.IsValid)
             {
-                //ViewData["employeeID"];
                 int id = _context.Employee.FirstOrDefault().ID;
                 dependent.employeeID = id;
                 _context.Add(dependent);
@@ -86,8 +85,7 @@ namespace HR_Payroll.Controllers
             {
                 return NotFound();
             }
-            ViewData["employeeID"] = dependent.employeeID;// new SelectList(_context.Employee, "ID", "ID", dependent.employeeID);
-         //   return RedirectToAction(nameof(Details),"Employees",new { ID = id });
+            ViewData["employeeID"] = dependent.employeeID;
             return View(dependent);
         }
 
@@ -107,8 +105,6 @@ namespace HR_Payroll.Controllers
             {
                 try
                 {
-                   // this.ViewBag.EmployeeID;
-                    //dependent.employeeID = (int?) ViewData["employeeID"];
                     _context.Update(dependent);
                     await _context.SaveChangesAsync();
                 }
@@ -123,7 +119,6 @@ namespace HR_Payroll.Controllers
                         throw;
                     }
                 }
-               // return RedirectToAction(nameof(Details), "Employees", new { ID = dependent.employeeID });
                 return RedirectToAction(nameof(Details), new { ID = dependent.ID });
             }
             ViewData["employeeID"] = new SelectList(_context.Employee, "ID", "ID", dependent.employeeID);
@@ -155,9 +150,10 @@ namespace HR_Payroll.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var dependent = await _context.Dependent.FindAsync(id);
+            int? eId = dependent.employeeID;
             _context.Dependent.Remove(dependent);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Details),"Employees",new { ID = eId });
         }
 
         private bool DependentExists(int id)

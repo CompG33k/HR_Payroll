@@ -25,8 +25,8 @@ namespace HR_Payroll_Library
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Benefit> Benefits { get; set; }
         public virtual DbSet<Dependent> Dependents { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<Benefit> Benefits { get; set; }
     }
 }

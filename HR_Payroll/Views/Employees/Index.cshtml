@@ -19,9 +19,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.lname)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.benefits)
-            </th>
+            </th>*@
             <th></th>
         </tr>
     </thead>
@@ -34,9 +34,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.lname)
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.benefits)
-            </td>
+            </td>*@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ID">Details</a> |

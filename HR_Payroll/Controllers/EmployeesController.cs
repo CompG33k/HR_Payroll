@@ -40,8 +40,13 @@ namespace HR_Payroll.Controllers
             {
                 return NotFound();
             }
+
             IEnumerable<Dependent> dependents = await _context.Dependent.Where(x => x.employeeID == employee.ID).ToListAsync();
             this.ViewBag.Dependents = dependents;
+          
+            IEnumerable<Benefit> benefits = await _context.Benefit.Where(x => x.employeeID == employee.ID).ToListAsync();
+            this.ViewBag.Benefits = benefits;
+
             return View(employee);
         }
 

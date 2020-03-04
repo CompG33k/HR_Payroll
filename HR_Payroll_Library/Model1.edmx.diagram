@@ -5,10 +5,11 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="3dee91af465c43068ca532a488fc6b4a" Name="Diagram1">
-        <EntityTypeShape EntityType="HRDemoDBModel.Benefit" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HRDemoDBModel.Dependent" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HRDemoDBModel.Dependent" Width="1.5" PointX="5" PointY="0.875" IsExpanded="true" />
         <EntityTypeShape EntityType="HRDemoDBModel.Employee" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
         <AssociationConnector Association="HRDemoDBModel.FK_Dependent_Employee" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="HRDemoDBModel.Benefit" Width="1.5" PointX="3" PointY="4.375" />
+        <AssociationConnector Association="HRDemoDBModel.fk_Benefit_Employee" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

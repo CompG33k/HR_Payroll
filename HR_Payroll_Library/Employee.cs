@@ -18,14 +18,20 @@ namespace HR_Payroll_Library
         public Employee()
         {
             this.Dependents = new HashSet<Dependent>();
+            this.Benefits1 = new HashSet<Benefit>();
         }
     
         public int ID { get; set; }
         public string fname { get; set; }
         public string lname { get; set; }
         public string benefits { get; set; }
+        public System.DateTime StartDate { get; set; }
+        public System.DateTime EndDate { get; set; }
+        public bool benefit_enrolled { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Dependent> Dependents { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Benefit> Benefits1 { get; set; }
     }
 }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="HRDemoDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="HRDemoDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Benefit">
           <Key>
             <PropertyRef Name="id" />
@@ -12,6 +12,7 @@
           <Property Name="id" Type="numeric" Precision="18" Scale="0" Nullable="false" />
           <Property Name="bcode" Type="nchar" MaxLength="10" />
           <Property Name="description" Type="nchar" MaxLength="10" />
+          <Property Name="employeeID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Dependent">
           <Key>
@@ -31,7 +32,22 @@
           <Property Name="fname" Type="nchar" MaxLength="10" />
           <Property Name="lname" Type="nchar" MaxLength="10" />
           <Property Name="benefits" Type="text" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" Nullable="false" />
+          <Property Name="benefit_enrolled" Type="bit" Nullable="false" />
         </EntityType>
+        <Association Name="fk_Benefit_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Benefit" Type="Self.Benefit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Benefit">
+              <PropertyRef Name="employeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Dependent_Employee">
           <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
           <End Role="Dependent" Type="Self.Dependent" Multiplicity="*" />
@@ -48,24 +64,19 @@
           <EntitySet Name="Benefit" EntityType="Self.Benefit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Dependent" EntityType="Self.Dependent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_Benefit_Employee" Association="Self.fk_Benefit_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Benefit" EntitySet="Benefit" />
+          </AssociationSet>
           <AssociationSet Name="FK_Dependent_Employee" Association="Self.FK_Dependent_Employee">
             <End Role="Employee" EntitySet="Employee" />
             <End Role="Dependent" EntitySet="Dependent" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="HRDemoDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Benefit">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
-          <Property Name="bcode" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="description" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-        </EntityType>
         <EntityType Name="Dependent">
           <Key>
             <PropertyRef Name="ID" />
@@ -86,6 +97,10 @@
           <Property Name="lname" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="benefits" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Dependents" Relationship="Self.FK_Dependent_Employee" FromRole="Employee" ToRole="Dependent" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="benefit_enrolled" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Benefits1" Relationship="HRDemoDBModel.fk_Benefit_Employee" FromRole="Employee" ToRole="Benefit" />
         </EntityType>
         <Association Name="FK_Dependent_Employee">
           <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
@@ -100,29 +115,46 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="HRDemoDBEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Benefits" EntityType="Self.Benefit" />
           <EntitySet Name="Dependents" EntityType="Self.Dependent" />
           <EntitySet Name="Employees" EntityType="Self.Employee" />
           <AssociationSet Name="FK_Dependent_Employee" Association="Self.FK_Dependent_Employee">
             <End Role="Employee" EntitySet="Employees" />
             <End Role="Dependent" EntitySet="Dependents" />
           </AssociationSet>
+          <EntitySet Name="Benefits" EntityType="HRDemoDBModel.Benefit" />
+          <AssociationSet Name="fk_Benefit_Employee" Association="HRDemoDBModel.fk_Benefit_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Benefit" EntitySet="Benefits" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Benefit">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="bcode" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="employeeID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="HRDemoDBModel.fk_Benefit_Employee" FromRole="Benefit" ToRole="Employee" />
+        </EntityType>
+        <Association Name="fk_Benefit_Employee">
+          <End Type="HRDemoDBModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="HRDemoDBModel.Benefit" Role="Benefit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Benefit">
+              <PropertyRef Name="employeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="HRDemoDBModelStoreContainer" CdmEntityContainer="HRDemoDBEntities">
-          <EntitySetMapping Name="Benefits">
-            <EntityTypeMapping TypeName="HRDemoDBModel.Benefit">
-              <MappingFragment StoreEntitySet="Benefit">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="bcode" ColumnName="bcode" />
-                <ScalarProperty Name="description" ColumnName="description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Dependents">
             <EntityTypeMapping TypeName="HRDemoDBModel.Dependent">
               <MappingFragment StoreEntitySet="Dependent">
@@ -137,10 +169,23 @@
           <EntitySetMapping Name="Employees">
             <EntityTypeMapping TypeName="HRDemoDBModel.Employee">
               <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="benefit_enrolled" ColumnName="benefit_enrolled" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="fname" ColumnName="fname" />
                 <ScalarProperty Name="lname" ColumnName="lname" />
                 <ScalarProperty Name="benefits" ColumnName="benefits" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Benefits">
+            <EntityTypeMapping TypeName="HRDemoDBModel.Benefit">
+              <MappingFragment StoreEntitySet="Benefit">
+                <ScalarProperty Name="employeeID" ColumnName="employeeID" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="bcode" ColumnName="bcode" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

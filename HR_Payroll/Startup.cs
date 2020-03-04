@@ -30,6 +30,9 @@ namespace HR_Payroll
 
             services.AddDbContext<HR_PayrollContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("HR_PayrollContext")));
+            
+    //        services.AddScoped<IBenefit, Benefit>();
+
 
         }
 
@@ -59,6 +62,7 @@ namespace HR_Payroll
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
         }
     }
 }

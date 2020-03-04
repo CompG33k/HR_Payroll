@@ -26,13 +26,32 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.lname)
         </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.benefits)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.benefits)
-        </dd>
+        @*<dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.benefits)
+            </dt>*@
+        @*<dd class="col-sm-10">
+                @Html.DisplayFor(model => model.benefits)
+            </dd>*@
+        @*<dd class="col-sm-10">
+                @Html.DisplayFor(model => model.benefits)
+            </dd>*@
     </dl>
+    <h5>Amounts</h5>
+     <dl class="row">
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.fname)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.fname)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.lname)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.lname)
+    </dd>
+</dl>
+    <h5>Benefits</h5>
     <table class="table">
         <thead>
             <tr>
@@ -60,12 +79,55 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.lname)
                     </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.dcode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Employee.ID)
+                        </td>*@
+                    @*<td>
+                            <a asp-controller="Dependents" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                            <a asp-controller="Dependents" asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                            <a asp-controller="Dependents" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                        </td>*@
+                </tr>
+            }
+        </tbody>
+    </table>
+    <h5>Dependents</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.fname)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.lname)
+                </th>
+                @*<th>
+                        @Html.DisplayNameFor(model => model.dcode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Employee)
+                    </th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Dependents)
+            {
+                <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.dcode)
+                        @Html.DisplayFor(modelItem => item.fname)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Employee.ID)
+                        @Html.DisplayFor(modelItem => item.lname)
                     </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.dcode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Employee.ID)
+                        </td>*@
                     <td>
                         <a asp-controller="Dependents" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
                         <a asp-controller="Dependents" asp-action="Details" asp-route-id="@item.ID">Details</a> |

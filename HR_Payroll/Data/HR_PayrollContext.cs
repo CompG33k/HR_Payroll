@@ -15,5 +15,6 @@ namespace HR_Payroll.Data
         }
         public DbSet<HR_Payroll_Library.Employee> Employee { get; set; }
         public DbSet<HR_Payroll_Library.Dependent> Dependent { get; set; }
+        public DbSet<HR_Payroll_Library.Benefit> Benefit { get; set; }
     }
 }
