@@ -13,10 +13,12 @@ namespace HR_Payroll.Controllers
     public class EmployeesController : Controller
     {
         private readonly HR_PayrollContext _context;
+        private readonly IPayrollStrategy _payrollStrategy;
 
-        public EmployeesController(HR_PayrollContext context)
+        public EmployeesController(HR_PayrollContext context, IPayrollStrategy payrollStrategy)
         {
             _context = context;
+            _payrollStrategy = payrollStrategy;
         }
 
         // GET: Employees
@@ -46,7 +48,7 @@ namespace HR_Payroll.Controllers
           
             IEnumerable<Benefit> benefits = await _context.Benefit.Where(x => x.employeeID == employee.ID).ToListAsync();
             this.ViewBag.Benefits = benefits;
-
+            int percent = _payrollStrategy.Amount(employee, dependents, BCode.A_Name);
             return View(employee);
         }
 

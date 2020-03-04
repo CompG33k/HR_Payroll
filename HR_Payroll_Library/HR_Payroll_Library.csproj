@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APercentBenefit.cs" />
     <Compile Include="BCode.cs" />
     <Compile Include="Benefit.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -61,9 +62,10 @@
     <Compile Include="Employee.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="IBenefitPackage.cs" />
+    <Compile Include="IDependencyResolver.cs" />
     <Compile Include="IPayrollStrategy.cs" />
-    <Compile Include="IPerson.cs" />
-    <Compile Include="Manager.cs" />
+    <Compile Include="IPayrollStrategyFactory.cs" />
     <Compile Include="Model1.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -79,6 +81,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
+    <Compile Include="PayrollStrategy.cs" />
+    <Compile Include="PayrollStrategyFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

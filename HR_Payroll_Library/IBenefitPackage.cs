@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace HR_Payroll_Library
 {
-    public interface IPayrollStrategy
+    public interface IBenefitPackage
     {
-        int Amount(Employee person,IEnumerable<Dependent> dependents,BCode code);
+        BCode BenefitType { get;  }
+        int Amount(Employee person,IEnumerable<Dependent> dependents);
         string GetType();
     }
 }

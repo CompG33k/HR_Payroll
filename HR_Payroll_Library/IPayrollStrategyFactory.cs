@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace HR_Payroll_Library
 {
-    interface IPerson
+    public interface IPayrollStrategyFactory
     {
+        IBenefitPackage[] Create();
     }
 }

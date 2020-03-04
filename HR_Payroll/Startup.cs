@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using HR_Payroll.Data;
-
+using HR_Payroll_Library;
 
 namespace HR_Payroll
 {
@@ -31,9 +31,14 @@ namespace HR_Payroll
             services.AddDbContext<HR_PayrollContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("HR_PayrollContext")));
             
-    //        services.AddScoped<IBenefit, Benefit>();
-
-
+            services.AddScoped<APercentBenefit>();
+            services.AddScoped<IPayrollStrategy, PayrollStrategy>();
+            services.AddScoped<IPayrollStrategyFactory, PayrollStrategyFactory>();
+            services.AddScoped<IBenefitPackage[]>(provider =>
+            {
+                var factory = (IPayrollStrategyFactory)provider.GetService(typeof(IPayrollStrategyFactory));
+                return factory.Create();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
