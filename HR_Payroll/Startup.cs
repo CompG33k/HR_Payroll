@@ -30,15 +30,16 @@ namespace HR_Payroll
 
             services.AddDbContext<HR_PayrollContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("HR_PayrollContext")));
-            
-            services.AddScoped<APercentBenefit>();
+                        
             services.AddScoped<IPayrollStrategy, PayrollStrategy>();
-            services.AddScoped<IPayrollStrategyFactory, PayrollStrategyFactory>();
-            services.AddScoped<IBenefitPackage[]>(provider =>
-            {
-                var factory = (IPayrollStrategyFactory)provider.GetService(typeof(IPayrollStrategyFactory));
-                return factory.Create();
-            });
+            services.AddScoped<IBenefitPackage,APercentBenefit>();
+            //services.AddScoped<IPayrollStrategyFactory, PayrollStrategyFactory>();
+            //services.AddScoped<IBenefitPackage[]>(provider =>
+            //{
+            //    var factory = (IPayrollStrategyFactory)provider.GetService(typeof(IPayrollStrategyFactory));
+            //    return factory.Create();
+            //});
+            //services.AddScoped<APercentBenefit>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

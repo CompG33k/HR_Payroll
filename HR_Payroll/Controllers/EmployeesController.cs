@@ -14,11 +14,15 @@ namespace HR_Payroll.Controllers
     {
         private readonly HR_PayrollContext _context;
         private readonly IPayrollStrategy _payrollStrategy;
+        private readonly IPayrollStrategyFactory _payrollStrategyFactory;
+//        
 
         public EmployeesController(HR_PayrollContext context, IPayrollStrategy payrollStrategy)
         {
             _context = context;
             _payrollStrategy = payrollStrategy;
+          //  _payrollStrategyFactory = payrollStrategyFactory;
+         //   _payrollStrategyFactory.Create();
         }
 
         // GET: Employees
