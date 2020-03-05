@@ -211,6 +211,8 @@
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
     <Content Include="SQLScripts\DataBaseCreate.sql" />
+    <Content Include="SQLScripts\Functions.sql" />
+    <Content Include="SQLScripts\StoredProcedures.sql" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
