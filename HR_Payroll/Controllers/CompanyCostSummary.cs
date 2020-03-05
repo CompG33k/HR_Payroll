@@ -10,24 +10,22 @@ using HR_Payroll_Library;
 
 namespace HR_Payroll.Controllers
 {
-    public class EmployeesController : Controller
+    public class CompanyCostSummary : Controller
     {
         private readonly HR_PayrollContext _context;
-        private readonly IPayrollStrategy _payrollStrategy;
 
-        public EmployeesController(HR_PayrollContext context, IPayrollStrategy payrollStrategy)
+        public CompanyCostSummary(HR_PayrollContext context)
         {
             _context = context;
-            _payrollStrategy = payrollStrategy;
         }
 
-        // GET: Employees
+        // GET: CompanyCostSummary
         public async Task<IActionResult> Index()
         {
             return View(await _context.Employee.ToListAsync());
         }
 
-        // GET: Employees/Details/5
+        // GET: CompanyCostSummary/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,35 +35,26 @@ namespace HR_Payroll.Controllers
 
             var employee = await _context.Employee
                 .FirstOrDefaultAsync(m => m.ID == id);
-            
             if (employee == null)
             {
                 return NotFound();
             }
 
-            IEnumerable<Dependent> dependents = await _context.Dependent.Where(x => x.employeeID == employee.ID).ToListAsync();
-            this.ViewBag.Dependents = dependents;
-          
-            IEnumerable<Benefit> benefits = await _context.Benefit.Where(x => x.employeeID == employee.ID).ToListAsync();
-            this.ViewBag.Benefits = benefits;
-
-            TempData["EmployeeAmount"] = _payrollStrategy.Amount(employee, dependents, BCode.A_Name);
-
             return View(employee);
         }
 
-        // GET: Employees/Create
+        // GET: CompanyCostSummary/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Employees/Create
+        // POST: CompanyCostSummary/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,fname,lname,benefits")] Employee employee)
+        public async Task<IActionResult> Create([Bind("ID,fname,lname,benefits,StartDate,EndDate,benefit_enrolled")] Employee employee)
         {
             if (ModelState.IsValid)
             {
@@ -76,7 +65,7 @@ namespace HR_Payroll.Controllers
             return View(employee);
         }
 
-        // GET: Employees/Edit/5
+        // GET: CompanyCostSummary/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,12 +81,12 @@ namespace HR_Payroll.Controllers
             return View(employee);
         }
 
-        // POST: Employees/Edit/5
+        // POST: CompanyCostSummary/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,fname,lname,benefits")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,fname,lname,benefits,StartDate,EndDate,benefit_enrolled")] Employee employee)
         {
             if (id != employee.ID)
             {
@@ -127,7 +116,7 @@ namespace HR_Payroll.Controllers
             return View(employee);
         }
 
-        // GET: Employees/Delete/5
+        // GET: CompanyCostSummary/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -145,7 +134,7 @@ namespace HR_Payroll.Controllers
             return View(employee);
         }
 
-        // POST: Employees/Delete/5
+        // POST: CompanyCostSummary/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -40,6 +40,7 @@ namespace HR_Payroll
             //    return factory.Create();
             //});
             //services.AddScoped<APercentBenefit>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

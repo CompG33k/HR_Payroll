@@ -33,8 +33,8 @@
           <Property Name="lname" Type="nchar" MaxLength="10" />
           <Property Name="benefits" Type="text" />
           <Property Name="StartDate" Type="datetime" Nullable="false" />
-          <Property Name="EndDate" Type="datetime" Nullable="false" />
           <Property Name="benefit_enrolled" Type="bit" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" />
         </EntityType>
         <Association Name="fk_Benefit_Employee">
           <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
@@ -60,6 +60,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="GetEmployeeSummary" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="HRDemoDBModelStoreContainer">
           <EntitySet Name="Benefit" EntityType="Self.Benefit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Dependent" EntityType="Self.Dependent" Schema="dbo" store:Type="Tables" />
@@ -77,17 +78,6 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="HRDemoDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Dependent">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="fname" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="lname" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="dcode" Type="Int32" />
-          <Property Name="employeeID" Type="Int32" />
-          <NavigationProperty Name="Employee" Relationship="Self.FK_Dependent_Employee" FromRole="Dependent" ToRole="Employee" />
-        </EntityType>
         <EntityType Name="Employee">
           <Key>
             <PropertyRef Name="ID" />
@@ -96,36 +86,27 @@
           <Property Name="fname" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="lname" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="benefits" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Dependents" Relationship="Self.FK_Dependent_Employee" FromRole="Employee" ToRole="Dependent" />
           <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
           <Property Name="benefit_enrolled" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Benefits1" Relationship="HRDemoDBModel.fk_Benefit_Employee" FromRole="Employee" ToRole="Benefit" />
+          <NavigationProperty Name="Dependents" Relationship="HRDemoDBModel.FK_Dependent_Employee" FromRole="Employee" ToRole="Dependent" />
         </EntityType>
-        <Association Name="FK_Dependent_Employee">
-          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
-          <End Role="Dependent" Type="Self.Dependent" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Dependent">
-              <PropertyRef Name="employeeID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="HRDemoDBEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Dependents" EntityType="Self.Dependent" />
           <EntitySet Name="Employees" EntityType="Self.Employee" />
-          <AssociationSet Name="FK_Dependent_Employee" Association="Self.FK_Dependent_Employee">
-            <End Role="Employee" EntitySet="Employees" />
-            <End Role="Dependent" EntitySet="Dependents" />
-          </AssociationSet>
           <EntitySet Name="Benefits" EntityType="HRDemoDBModel.Benefit" />
           <AssociationSet Name="fk_Benefit_Employee" Association="HRDemoDBModel.fk_Benefit_Employee">
             <End Role="Employee" EntitySet="Employees" />
             <End Role="Benefit" EntitySet="Benefits" />
           </AssociationSet>
+          <FunctionImport Name="GetEmployeeSummary" ReturnType="Collection(HRDemoDBModel.GetEmployeeSummary_Result)" />
+          <EntitySet Name="Dependents" EntityType="HRDemoDBModel.Dependent" />
+          <AssociationSet Name="FK_Dependent_Employee" Association="HRDemoDBModel.FK_Dependent_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Dependent" EntitySet="Dependents" />
+          </AssociationSet>
+          <FunctionImport Name="GetEmployeeSummaryReport" ReturnType="Collection(HRDemoDBModel.EmployeeSummaryReport)" />
+          <FunctionImport Name="GetEmployeeSummary1" ReturnType="Collection(HRDemoDBModel.GetEmployeeSummary1_Result)" />
         </EntityContainer>
         <EntityType Name="Benefit">
           <Key>
@@ -149,23 +130,62 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="GetEmployeeSummary_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="fname" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="lname" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="StartDate" Nullable="false" Precision="23" />
+          <Property Type="Boolean" Name="benefit_enrolled" Nullable="false" />
+          <Property Type="Int32" Name="Dependents" Nullable="true" />
+          <Property Type="Int32" Name="YearsEmployed" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="Dependent">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fname" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="lname" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="dcode" Type="Int32" />
+          <Property Name="employeeID" Type="Int32" />
+          <NavigationProperty Name="Employee" Relationship="HRDemoDBModel.FK_Dependent_Employee" FromRole="Dependent" ToRole="Employee" />
+        </EntityType>
+        <Association Name="FK_Dependent_Employee">
+          <End Type="HRDemoDBModel.Employee" Role="Employee" Multiplicity="0..1" />
+          <End Type="HRDemoDBModel.Dependent" Role="Dependent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Dependent">
+              <PropertyRef Name="employeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="EmployeeSummaryReport">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="fname" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="lname" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="StartDate" Nullable="false" Precision="23" />
+          <Property Type="Boolean" Name="benefit_enrolled" Nullable="false" />
+          <Property Type="Int32" Name="Dependents" Nullable="true" />
+          <Property Type="Int32" Name="YearsEmployed" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetEmployeeSummary1_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="fname" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="lname" Nullable="true" MaxLength="10" />
+          <Property Type="DateTime" Name="StartDate" Nullable="false" Precision="23" />
+          <Property Type="Boolean" Name="benefit_enrolled" Nullable="false" />
+          <Property Type="Int32" Name="Dependents" Nullable="true" />
+          <Property Type="Int32" Name="YearsEmployed" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="HRDemoDBModelStoreContainer" CdmEntityContainer="HRDemoDBEntities">
-          <EntitySetMapping Name="Dependents">
-            <EntityTypeMapping TypeName="HRDemoDBModel.Dependent">
-              <MappingFragment StoreEntitySet="Dependent">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="fname" ColumnName="fname" />
-                <ScalarProperty Name="lname" ColumnName="lname" />
-                <ScalarProperty Name="dcode" ColumnName="dcode" />
-                <ScalarProperty Name="employeeID" ColumnName="employeeID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Employees">
             <EntityTypeMapping TypeName="HRDemoDBModel.Employee">
               <MappingFragment StoreEntitySet="Employee">
@@ -189,6 +209,30 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Dependents">
+            <EntityTypeMapping TypeName="HRDemoDBModel.Dependent">
+              <MappingFragment StoreEntitySet="Dependent">
+                <ScalarProperty Name="employeeID" ColumnName="employeeID" />
+                <ScalarProperty Name="dcode" ColumnName="dcode" />
+                <ScalarProperty Name="lname" ColumnName="lname" />
+                <ScalarProperty Name="fname" ColumnName="fname" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetEmployeeSummary1" FunctionName="HRDemoDBModel.Store.GetEmployeeSummary">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HRDemoDBModel.GetEmployeeSummary1_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="fname" ColumnName="fname" />
+                <ScalarProperty Name="lname" ColumnName="lname" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="benefit_enrolled" ColumnName="benefit_enrolled" />
+                <ScalarProperty Name="Dependents" ColumnName="Dependents" />
+                <ScalarProperty Name="YearsEmployed" ColumnName="YearsEmployed" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

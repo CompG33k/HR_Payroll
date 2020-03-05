@@ -17,8 +17,8 @@ namespace HR_Payroll_Library
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Employee()
         {
-            this.Dependents = new HashSet<Dependent>();
             this.Benefits1 = new HashSet<Benefit>();
+            this.Dependents = new HashSet<Dependent>();
         }
     
         public int ID { get; set; }
@@ -26,12 +26,12 @@ namespace HR_Payroll_Library
         public string lname { get; set; }
         public string benefits { get; set; }
         public System.DateTime StartDate { get; set; }
-        public System.DateTime EndDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
         public bool benefit_enrolled { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Dependent> Dependents { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Benefit> Benefits1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Dependent> Dependents { get; set; }
     }
 }

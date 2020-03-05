@@ -7,27 +7,27 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HR_Payroll.Data;
 using HR_Payroll_Library;
+using System.Data.Entity;
 
 namespace HR_Payroll.Controllers
 {
-    public class EmployeesController : Controller
+    public class GetEmployeeSummary_ResultController : Controller
     {
         private readonly HR_PayrollContext _context;
-        private readonly IPayrollStrategy _payrollStrategy;
 
-        public EmployeesController(HR_PayrollContext context, IPayrollStrategy payrollStrategy)
+        public GetEmployeeSummary_ResultController(HR_PayrollContext context)
         {
             _context = context;
-            _payrollStrategy = payrollStrategy;
         }
 
-        // GET: Employees
+        // GET: GetEmployeeSummary_Result
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employee.ToListAsync());
+            _context.GetEmployeeSummary_Result = SqlHelper.GetEmployeeSummaryResult(_context.Database.GetDbConnection().ConnectionString);
+            return View( _context.GetEmployeeSummary_Result);
         }
 
-        // GET: Employees/Details/5
+        // GET: GetEmployeeSummary_Result/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,48 +35,39 @@ namespace HR_Payroll.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employee
+            var getEmployeeSummary_Result = await _context.GetEmployeeSummary_Result
                 .FirstOrDefaultAsync(m => m.ID == id);
-            
-            if (employee == null)
+            if (getEmployeeSummary_Result == null)
             {
                 return NotFound();
             }
 
-            IEnumerable<Dependent> dependents = await _context.Dependent.Where(x => x.employeeID == employee.ID).ToListAsync();
-            this.ViewBag.Dependents = dependents;
-          
-            IEnumerable<Benefit> benefits = await _context.Benefit.Where(x => x.employeeID == employee.ID).ToListAsync();
-            this.ViewBag.Benefits = benefits;
-
-            TempData["EmployeeAmount"] = _payrollStrategy.Amount(employee, dependents, BCode.A_Name);
-
-            return View(employee);
+            return View(getEmployeeSummary_Result);
         }
 
-        // GET: Employees/Create
+        // GET: GetEmployeeSummary_Result/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Employees/Create
+        // POST: GetEmployeeSummary_Result/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,fname,lname,benefits")] Employee employee)
+        public async Task<IActionResult> Create([Bind("ID,fname,lname,StartDate,benefit_enrolled,Dependents,YearsEmployed")] GetEmployeeSummary_Result getEmployeeSummary_Result)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(employee);
+                _context.Add(getEmployeeSummary_Result);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(employee);
+            return View(getEmployeeSummary_Result);
         }
 
-        // GET: Employees/Edit/5
+        // GET: GetEmployeeSummary_Result/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -84,22 +75,22 @@ namespace HR_Payroll.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employee.FindAsync(id);
-            if (employee == null)
+            var getEmployeeSummary_Result = await _context.GetEmployeeSummary_Result.Select(x=>x.ID == id).ToListAsync();
+            if (getEmployeeSummary_Result == null)
             {
                 return NotFound();
             }
-            return View(employee);
+            return View(getEmployeeSummary_Result);
         }
 
-        // POST: Employees/Edit/5
+        // POST: GetEmployeeSummary_Result/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,fname,lname,benefits")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,fname,lname,StartDate,benefit_enrolled,Dependents,YearsEmployed")] GetEmployeeSummary_Result getEmployeeSummary_Result)
         {
-            if (id != employee.ID)
+            if (id != getEmployeeSummary_Result.ID)
             {
                 return NotFound();
             }
@@ -108,12 +99,12 @@ namespace HR_Payroll.Controllers
             {
                 try
                 {
-                    _context.Update(employee);
+                    _context.Update(getEmployeeSummary_Result);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EmployeeExists(employee.ID))
+                    if (!GetEmployeeSummary_ResultExists(getEmployeeSummary_Result.ID))
                     {
                         return NotFound();
                     }
@@ -124,10 +115,10 @@ namespace HR_Payroll.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(employee);
+            return View(getEmployeeSummary_Result);
         }
 
-        // GET: Employees/Delete/5
+        // GET: GetEmployeeSummary_Result/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,30 +126,30 @@ namespace HR_Payroll.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employee
+            var getEmployeeSummary_Result = await _context.GetEmployeeSummary_Result
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (employee == null)
+            if (getEmployeeSummary_Result == null)
             {
                 return NotFound();
             }
 
-            return View(employee);
+            return View(getEmployeeSummary_Result);
         }
 
-        // POST: Employees/Delete/5
+        // POST: GetEmployeeSummary_Result/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var employee = await _context.Employee.FindAsync(id);
-            _context.Employee.Remove(employee);
+            var getEmployeeSummary_Result = await _context.GetEmployeeSummary_Result.Select(x=>x.ID ==id).ToListAsync();
+           // _context.GetEmployeeSummary_Result.FirstOrDefaultAsync(getEmployeeSummary_Result);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EmployeeExists(int id)
+        private bool GetEmployeeSummary_ResultExists(int id)
         {
-            return _context.Employee.Any(e => e.ID == id);
+            return _context.GetEmployeeSummary_Result.Any(e => e.ID == id);
         }
     }
 }
