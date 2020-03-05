@@ -13,15 +13,11 @@ namespace HR_Payroll_Library
         {
             List<GetEmployeeSummary_Result> list = new List<GetEmployeeSummary_Result>();
 
-            //set the connection string
-            //string connString = @"Server =.\SQL2K17; Database = SampleDB; Trusted_Connection = True;";
-
             try
             {
                 //sql connection object
                 using (SqlConnection conn = new SqlConnection(connString))
                 {
-
                     //set stored procedure name
                     string spName = @"dbo.[GetEmployeeSummary]";
 
@@ -35,9 +31,6 @@ namespace HR_Payroll_Library
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     SqlDataReader dr = cmd.ExecuteReader();
 
-                    Console.WriteLine(Environment.NewLine + "Retrieving data from database..." + Environment.NewLine);
-                    Console.WriteLine("Retrieved records:");
-                    
                     //check if there are records
                     if (dr.HasRows)
                     {

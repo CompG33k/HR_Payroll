@@ -183,6 +183,7 @@
     <Compile Include="PayrollStrategy.cs" />
     <Compile Include="PayrollStrategyFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="YearlyBenefit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />

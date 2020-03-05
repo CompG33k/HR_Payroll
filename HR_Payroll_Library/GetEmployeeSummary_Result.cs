@@ -20,5 +20,7 @@ namespace HR_Payroll_Library
         public bool benefit_enrolled { get; set; }
         public Nullable<int> Dependents { get; set; }
         public Nullable<int> YearsEmployed { get; set; }
+        public int BenefitCostTotal { get; set; }
+        public int DependentCostTotal { get; set; }
     }
 }

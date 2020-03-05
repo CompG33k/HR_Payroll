@@ -3,13 +3,38 @@
 @{
     ViewData["Title"] = "Cost Summary";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var yearCost = TempData["YearCost"];
+
 }
 
-    <h1>Cost Summary</h1>
-
+<h1>Cost Summary</h1>
+<dl class="row">
+    <dt class="col-sm-2">
+        <span>Cost of Employee $@(yearCost)</span>
+        @*@Html.DisplayNameFor(model => model.fname)*@
+    </dt>
+    @*<dd class="col-sm-10">
+        @Html.DisplayFor(model => model.fname)
+    </dd>
+    <dt class="col-sm-2">
+        @Html.DisplayNameFor(model => model.lname)
+    </dt>
+    <dd class="col-sm-10">
+        @Html.DisplayFor(model => model.lname)
+    </dd>*@
+    @*<dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.benefits)
+        </dt>*@
+    @*<dd class="col-sm-10">
+            @Html.DisplayFor(model => model.benefits)
+        </dd>*@
+    @*<dd class="col-sm-10">
+            @Html.DisplayFor(model => model.benefits)
+        </dd>*@
+</dl>
 @*<p>
-    <a asp-action="Create">Create New</a>
-</p>*@
+        <a asp-action="Create">Create New</a>
+    </p>*@
 <table class="table">
     <thead>
         <tr>
@@ -22,20 +47,28 @@
             <th>
                 @Html.DisplayNameFor(model => model.StartDate)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.benefit_enrolled)
-            </th>
+            @*<th>
+            @Html.DisplayNameFor(model => model.benefit_enrolled)
+        </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Dependents)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.YearsEmployed)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BenefitCostTotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DependentCostTotal)
+            </th>
+
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.fname)
@@ -46,21 +79,27 @@
             <td>
                 @Html.DisplayFor(modelItem => item.StartDate)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.benefit_enrolled)
-            </td>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.benefit_enrolled)
+        </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.Dependents)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.YearsEmployed)
             </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BenefitCostTotal)
+            </td>
+            <th>
+                @Html.DisplayFor(model => item.DependentCostTotal)
+            </th>
             @*<td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>*@
+            <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+        </td>*@
         </tr>
-}
+        }
     </tbody>
 </table>

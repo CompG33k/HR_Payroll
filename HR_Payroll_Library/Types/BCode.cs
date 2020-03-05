@@ -8,6 +8,6 @@ namespace HR_Payroll_Library
 {
     public enum BCode
     {
-        A_Name,Dependent
+        A_Name,Dependent,PerYear
     }
 }

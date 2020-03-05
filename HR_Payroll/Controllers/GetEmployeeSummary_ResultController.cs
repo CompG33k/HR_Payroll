@@ -14,8 +14,9 @@ namespace HR_Payroll.Controllers
     public class GetEmployeeSummary_ResultController : Controller
     {
         private readonly HR_PayrollContext _context;
+        private readonly IPayrollStrategy _payrollStrategy;
 
-        public GetEmployeeSummary_ResultController(HR_PayrollContext context)
+        public GetEmployeeSummary_ResultController(HR_PayrollContext context, IPayrollStrategy payrollStrategy)
         {
             _context = context;
         }
@@ -24,6 +25,17 @@ namespace HR_Payroll.Controllers
         public async Task<IActionResult> Index()
         {
             _context.GetEmployeeSummary_Result = SqlHelper.GetEmployeeSummaryResult(_context.Database.GetDbConnection().ConnectionString);
+            foreach(var cur in _context.GetEmployeeSummary_Result)
+            {
+                
+                var employee = _context.Employee.FirstOrDefault(x => x.ID == cur.ID);
+                int count = _context.Dependent.Select(x => x.employeeID == employee.ID).Count();
+                cur.BenefitCostTotal   = 1000 * cur.YearsEmployed ?? 1;
+                cur.DependentCostTotal = (500  * cur.YearsEmployed ?? 1) * count;
+                //    _payrollStrategy.Amount(employee,employee.Dependents, BCode.Dependent);
+                // cur.BenefitCostTotal = _payrollStrategy.Amount(employee, employee.Dependents, BCode.PerYear);
+            }
+           
             return View( _context.GetEmployeeSummary_Result);
         }
 
