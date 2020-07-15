@@ -1,2 +1,4 @@
 # HR_Payroll
-Simple Project
+Simple CRUD Project
+To Demonstrate MVC connecting to a database Insert/Update/Delete
+showing repors page too
